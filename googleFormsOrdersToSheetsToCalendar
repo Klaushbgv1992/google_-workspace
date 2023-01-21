@@ -1,0 +1,50 @@
+function createEvent() {
+  // Get the active sheet in the current spreadsheet
+  var sheet = SpreadsheetApp.getActiveSheet();
+  // Get the last row of the sheet
+  var lastRow = sheet.getLastRow();
+  
+  // Get the range of the date column
+  var dateCol = sheet.getRange("C2:C" + lastRow);
+  // Get the range of the title column
+  var titleCol = sheet.getRange("T2:T" + lastRow);
+  // Get the calendar by ID
+  var calendar = CalendarApp.getCalendarById("kassybakes@gmail.com");
+  
+  // Get the values of the date column
+  var dateVals = dateCol.getValues();
+  // Get the values of the title column
+  var titleVals = titleCol.getValues();
+  
+  // Loop through the rows in the sheet
+  for (var i = 0; i < dateVals.length; i++) {
+    // Create a new date object for the current row's date value
+    var date = new Date(dateVals[i][0]);
+    
+    // Create a new start time for the event
+    var startTime = new Date(date);
+    // Create a new end time for the event
+    var endTime = new Date(date);
+    
+    // Set the start time's hours and minutes
+    startTime.setHours(9);
+    startTime.setMinutes(0);
+    // Set the end time's hours and minutes
+    endTime.setHours(17);
+    endTime.setMinutes(0);
+    
+    // Get the title of the event
+    var title = titleVals[i][0];
+    
+    // Get all events for the current date
+    var existingEvents = calendar.getEventsForDay(date);
+    // Get the title of existing events
+    var existingEventTitles = existingEvents.map(function(event) { return event.getTitle() });
+    
+    // Check if the title of the new event already exists in the existing events
+    if(!existingEventTitles.includes(title)){
+      // If not, create the event
+      calendar.createEvent(title, startTime, endTime);
+    }
+  }
+}
