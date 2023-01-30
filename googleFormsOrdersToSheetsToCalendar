@@ -1,3 +1,5 @@
+//Script to autopopulate booking dates made on a google form appear on google calendar
+
 function createEvent() {
   // Get the active sheet in the current spreadsheet
   var sheet = SpreadsheetApp.getActiveSheet();
